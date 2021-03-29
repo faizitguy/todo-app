@@ -15,7 +15,7 @@ import {
 } from "@material-ui/pickers";
 import TodoCard from './TodoCard'
 import {addTask, getTask, deleteTask } from '../redux/actionCreator'
-
+import EditTodo from './EditTodo'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -147,6 +147,8 @@ const Dashboard = () => {
                 )
             })}
         </div>
+
+        <EditTodo/>
 
         </div>
     )

@@ -14,6 +14,9 @@ import {
   DELETE_TASK_REQUEST,
   DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILURE,
+  EDIT_TASK_REQUEST,
+  EDIT_TASK_SUCCESS,
+  EDIT_TASK_FAILURE,
 } from "./actionTypes";
 
 export const signInRequest = (payload) => ({
@@ -45,6 +48,40 @@ export const signin = (email, password) => (dispatch) => {
   })
     .then((res) => dispatch(signInSuccess(res)))
     .catch((err) => dispatch(signInFailure(err)));
+};
+
+// get tasks requests
+
+//get task
+
+export const getTaskRequest = () => ({
+  type: GET_TASK_REQUEST,
+});
+
+export const getTaskSuccess = (payload) => ({
+  type: GET_TASK_SUCCESS,
+  payload,
+});
+
+export const getTaskFailure = (payload) => ({
+  type: GET_TASK_FAILURE,
+  payload,
+});
+
+//"GET" request(AXIOS CALL)
+
+export const getTask = (token) => async (dispatch) => {
+  dispatch(getTaskRequest());
+  await axios({
+    method: "GET",
+    url:
+      "https://stage.api.sloovi.com/task/lead_04412ba1d622466cab1f0ad941fcf303",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => dispatch(getTaskSuccess(res)))
+    .catch((err) => dispatch(getTaskFailure(err)));
 };
 
 // add task request starts
@@ -82,42 +119,8 @@ export const addTask = (date, time, task, token) => async (dispatch) => {
       is_completed: 0,
     },
   })
-    .then((res) => dispatch(addTaskSuccess(res)))
+    .then((res) => dispatch(getTask()))
     .catch((err) => dispatch(addTaskFailure(err)));
-};
-
-// get tasks requests
-
-//get task
-
-export const getTaskRequest = () => ({
-  type: GET_TASK_REQUEST,
-});
-
-export const getTaskSuccess = (payload) => ({
-  type: GET_TASK_SUCCESS,
-  payload,
-});
-
-export const getTaskFailure = (payload) => ({
-  type: GET_TASK_FAILURE,
-  payload,
-});
-
-//"GET" request(AXIOS CALL)
-
-export const getTask = (token) => async (dispatch) => {
-  dispatch(getTaskRequest());
-  await axios({
-    method: "GET",
-    url:
-      "https://stage.api.sloovi.com/task/lead_04412ba1d622466cab1f0ad941fcf303",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then((res) => dispatch(getTaskSuccess(res)))
-    .catch((err) => dispatch(getTaskFailure(err)));
 };
 
 //Delete Task
@@ -148,4 +151,34 @@ export const deleteTask = (id, token) => (dispatch) => {
   })
     .then((res) => dispatch(getTask(token)))
     .catch((err) => dispatch(deleteTaskSuccess()));
+};
+
+//EDIT Task
+
+export const editTaskRequest = () => ({
+  type: EDIT_TASK_REQUEST,
+});
+
+export const editTaskSuccess = (payload) => ({
+  type: EDIT_TASK_SUCCESS,
+  payload,
+});
+
+export const editTaskFailure = () => ({
+  type: EDIT_TASK_FAILURE,
+});
+
+//EDIT TASK (EDIT REQUEST)
+
+export const editTask = (id, token) => (dispatch) => {
+  dispatch(editTaskRequest());
+  axios({
+    method: "PUT",
+    url: `https://stage.api.sloovi.com/task/lead_04412ba1d622466cab1f0ad941fcf303/${id}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => dispatch(getTask(token)))
+    .catch((err) => dispatch(editTaskSuccess()));
 };

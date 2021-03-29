@@ -9,6 +9,9 @@ import {
   GET_TASK_REQUEST,
   GET_TASK_SUCCESS,
   GET_TASK_FAILURE,
+  EDIT_TASK_REQUEST,
+  EDIT_TASK_SUCCESS,
+  EDIT_TASK_FAILURE,
 } from "./actionTypes";
 
 const initState = {
@@ -75,6 +78,21 @@ export const reducer = (state = initState, { type, payload }) => {
         ...state,
         isLoading: false,
         isError: true,
+      };
+    case EDIT_TASK_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case EDIT_TASK_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+      };
+    case EDIT_TASK_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
       };
     default:
       return state;

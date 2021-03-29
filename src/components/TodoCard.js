@@ -46,7 +46,7 @@ const TodoCard = ({ task, handleDelete }) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button>Edit</Button>
+          <Button onClick={() => console.log("editing")}>Edit</Button>
           <Button onClick={() => handleDelete(task.id, token)}>Delete</Button>
         </CardActions>
       </Card>
