@@ -67,6 +67,8 @@ const Dashboard = () => {
         e.preventDefault()
          dispatch(addTask(date, newTime(time), task, token))
         .then(() => dispatch(getTask(token)))
+       .then(() => setTask(""))
+       
     }
 
     console.log(task, date, time)
@@ -79,7 +81,7 @@ const Dashboard = () => {
     return (
         <div className = "dashboard__todo">
            <h4>Add Task </h4>
-           <form className={classes.form} noValidate>
+           <form className={classes.form} noValidate style = {{padding:"20px", border:'2px solid grey'}}>
           <TextField
             variant="outlined"
             margin="normal"

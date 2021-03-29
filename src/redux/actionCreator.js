@@ -170,9 +170,9 @@ export const editTaskFailure = () => ({
 
 //EDIT TASK (EDIT REQUEST)
 
-export const editTask = (id, token, date, time, task) => (dispatch) => {
+export const editTask = (id, token, date, time, task) => async (dispatch) => {
   dispatch(editTaskRequest());
-  axios({
+  await axios({
     method: "PUT",
     url: `https://stage.api.sloovi.com/task/lead_04412ba1d622466cab1f0ad941fcf303/${id}`,
     headers: {
