@@ -46,6 +46,14 @@ const useStyles = makeStyles((theme) => ({
 
 const TodoCard = ({ task, handleDelete }) => {
   const [open, setOpen] = React.useState(false);
+  const { task_msg, task_time, task_date } = task;
+
+  const [newTask, setNewTask] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  setNewTask(task_msg);
+  setDate(task_date);
+  setTime(task_time);
 
   const handleOpen = () => {
     setOpen(true);
@@ -57,6 +65,7 @@ const TodoCard = ({ task, handleDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const classes = useStyles();
   const token = useSelector((state) => state.token);
+
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
@@ -72,14 +81,15 @@ const TodoCard = ({ task, handleDelete }) => {
       .join(":");
   };
 
-  //   const handleChange = (e) => {
-  //     const { name, value } = e.target;
+  const newTime = (str) => {
+    let time = str.split(":");
+    let seconds = Number(time[0]) * 60 * 60 + Number(time[1]) * 60;
+    return seconds;
+  };
 
-  //     setMyState((prevState) => ({
-  //       ...prevState,
-  //       [name]: value,
-  //     }));
-  //   };
+  const handleEdit = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div style={{ margin: "15px" }}>
@@ -118,38 +128,40 @@ const TodoCard = ({ task, handleDelete }) => {
             <Fade in={open}>
               <div
                 className={classes.paper}
-                style={{ width: "350px", height: "250px" }}
+                style={{ width: "350px", height: "320px" }}
               >
+                <h2 style={{ textAlign: "center" }}>Edit Task</h2>
                 <form className={classes.form} noValidate>
                   <TextField
                     variant="outlined"
                     margin="normal"
                     required
                     fullWidth
-                    id="email"
                     label="Add Task"
-                    name="email"
+                    name="task_msg"
                     autoFocus
-                    defaultValue={task.task_msg}
                     style={{ marginTop: "10px" }}
+                    value={newTask}
+                    onChange={(e) => setNewTask(e.target.value)}
                   />
                   <TextField
                     id="date"
                     label="Date"
                     type="date"
-                    defaultValue="2021-03-29"
+                    name="task_date"
                     className={classes.textField}
                     InputLabelProps={{
                       shrink: true,
                     }}
-                    defaultValue={task.task_date}
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
                     style={{ marginTop: "30px" }}
                   />
                   <TextField
                     id="time"
                     label="Time"
                     type="time"
-                    defaultValue="07:30"
+                    name="task_time"
                     className={classes.textField}
                     InputLabelProps={{
                       shrink: true,
@@ -157,7 +169,8 @@ const TodoCard = ({ task, handleDelete }) => {
                     inputProps={{
                       step: 300, // 5 min
                     }}
-                    defaultValue={secondsToHours(task.task_time)}
+                    value={secondsToHours(time)}
+                    onChange={(e) => setTime(setTime(e.target.value))}
                     style={{ marginLeft: "30px", marginTop: "30px" }}
                   />
 
@@ -169,8 +182,9 @@ const TodoCard = ({ task, handleDelete }) => {
                     color="primary"
                     className={classes.submit}
                     style={{ marginTop: "40px" }}
+                    onClick={handleEdit}
                   >
-                    Add Task
+                    Edit Task
                   </Button>
                 </form>
               </div>
