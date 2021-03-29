@@ -170,13 +170,20 @@ export const editTaskFailure = () => ({
 
 //EDIT TASK (EDIT REQUEST)
 
-export const editTask = (id, token) => (dispatch) => {
+export const editTask = (id, token, date, time, task) => (dispatch) => {
   dispatch(editTaskRequest());
   axios({
     method: "PUT",
     url: `https://stage.api.sloovi.com/task/lead_04412ba1d622466cab1f0ad941fcf303/${id}`,
     headers: {
       Authorization: `Bearer ${token}`,
+    },
+    data: {
+      assigned_user: "user_15f4808a77194be88c8d19414671d3c8",
+      task_date: date,
+      task_time: time,
+      task_msg: task,
+      is_completed: 0,
     },
   })
     .then((res) => dispatch(getTask(token)))

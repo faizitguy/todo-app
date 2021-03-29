@@ -15,8 +15,6 @@ import {
 } from "@material-ui/pickers";
 import TodoCard from './TodoCard'
 import {addTask, getTask, deleteTask } from '../redux/actionCreator'
-import EditTodo from './EditTodo'
-
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -49,7 +47,6 @@ const Dashboard = () => {
     const token = useSelector(state => state.token)
 
     console.log(token, 'token data from dashboard')
-
 
     useState(  () =>  {
         dispatch( getTask(token))
@@ -148,7 +145,7 @@ const Dashboard = () => {
             })}
         </div>
 
-        <EditTodo/>
+   
 
         </div>
     )
