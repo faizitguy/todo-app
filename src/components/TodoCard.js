@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import { deleteTask } from "../redux/actionCreator";
+import { deleteTask, editTask } from "../redux/actionCreator";
 import { responsiveFontSizes, TextField } from "@material-ui/core";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -47,14 +47,13 @@ const useStyles = makeStyles((theme) => ({
 const TodoCard = ({ task, handleDelete }) => {
   const [open, setOpen] = React.useState(false);
   const { task_msg, task_time, task_date } = task;
-
-  const [newTask, setNewTask] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  setNewTask(task_msg);
-  setDate(task_date);
-  setTime(task_time);
-
+  const dispatch = useDispatch();
+  const initState = {
+    task_msg: task_msg,
+    task_time: task_time,
+    task_date: task_date,
+  };
+  const [state, setMyState] = useState(initState);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -65,7 +64,6 @@ const TodoCard = ({ task, handleDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const classes = useStyles();
   const token = useSelector((state) => state.token);
-
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
@@ -87,8 +85,23 @@ const TodoCard = ({ task, handleDelete }) => {
     return seconds;
   };
 
-  const handleEdit = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setMyState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleEdit = (e, id) => {
     e.preventDefault();
+    dispatch(
+      editTask(id, token, state.task_date, state.task_time, state.task_msg)
+    );
+    setTimeout(() => {
+      handleClose();
+    }, 1000);
   };
 
   return (
@@ -112,7 +125,7 @@ const TodoCard = ({ task, handleDelete }) => {
       </Card>
 
       <div>
-        <div style={{ background: "grey" }}>
+        <div>
           <Modal
             aria-labelledby="transition-modal-title"
             aria-describedby="transition-modal-description"
@@ -141,8 +154,8 @@ const TodoCard = ({ task, handleDelete }) => {
                     name="task_msg"
                     autoFocus
                     style={{ marginTop: "10px" }}
-                    value={newTask}
-                    onChange={(e) => setNewTask(e.target.value)}
+                    value={state.task_msg}
+                    onChange={handleChange}
                   />
                   <TextField
                     id="date"
@@ -153,9 +166,9 @@ const TodoCard = ({ task, handleDelete }) => {
                     InputLabelProps={{
                       shrink: true,
                     }}
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
+                    value={state.task_date}
                     style={{ marginTop: "30px" }}
+                    onChange={handleChange}
                   />
                   <TextField
                     id="time"
@@ -169,9 +182,9 @@ const TodoCard = ({ task, handleDelete }) => {
                     inputProps={{
                       step: 300, // 5 min
                     }}
-                    value={secondsToHours(time)}
-                    onChange={(e) => setTime(setTime(e.target.value))}
+                    value={secondsToHours(task.task_time)}
                     style={{ marginLeft: "30px", marginTop: "30px" }}
+                    onChange={handleChange}
                   />
 
                   <Button
@@ -182,7 +195,7 @@ const TodoCard = ({ task, handleDelete }) => {
                     color="primary"
                     className={classes.submit}
                     style={{ marginTop: "40px" }}
-                    onClick={handleEdit}
+                    onClick={(e) => handleEdit(e, task.id)}
                   >
                     Edit Task
                   </Button>
