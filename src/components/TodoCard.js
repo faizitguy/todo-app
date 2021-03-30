@@ -44,15 +44,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// todocard component strats
+
 const TodoCard = ({ task, handleDelete }) => {
   const [open, setOpen] = React.useState(false);
   const { task_msg, task_time, task_date } = task;
   const dispatch = useDispatch();
+
   const initState = {
     task_msg: task_msg,
     task_time: task_time,
     task_date: task_date,
   };
+
   const [state, setMyState] = useState(initState);
   const handleOpen = () => {
     setOpen(true);
@@ -61,12 +65,18 @@ const TodoCard = ({ task, handleDelete }) => {
   const handleClose = () => {
     setOpen(false);
   };
+
   const [isEditing, setIsEditing] = useState(false);
+
   const classes = useStyles();
+
   const token = useSelector((state) => state.token);
+
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
+
+  // convert seconds to string format
 
   const secondsToHours = (secs) => {
     var sec_num = parseInt(secs, 10);
@@ -78,6 +88,8 @@ const TodoCard = ({ task, handleDelete }) => {
       .filter((v, i) => v !== "00" || i > 0)
       .join(":");
   };
+
+  // convert str to seconds format
 
   const newTime = (str) => {
     let time = str.split(":");
@@ -93,6 +105,8 @@ const TodoCard = ({ task, handleDelete }) => {
       [name]: value,
     }));
   };
+
+  // handle edit request
 
   const handleEdit = (e, id) => {
     e.preventDefault();
