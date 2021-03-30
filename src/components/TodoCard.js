@@ -44,20 +44,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// todocard component strats
+// todocard component starts
 
 const TodoCard = ({ task, handleDelete }) => {
   const [open, setOpen] = React.useState(false);
   const { task_msg, task_time, task_date } = task;
+
   const dispatch = useDispatch();
 
-  const initState = {
-    task_msg: task_msg,
-    task_time: task_time,
-    task_date: task_date,
-  };
-
-  const [state, setMyState] = useState(initState);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -97,9 +91,16 @@ const TodoCard = ({ task, handleDelete }) => {
     return seconds;
   };
 
+  const initState = {
+    task_msg: task_msg,
+    task_time: secondsToHours(task_time),
+    task_date: task_date,
+  };
+
+  const [state, setMyState] = useState(initState);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setMyState((prevState) => ({
       ...prevState,
       [name]: value,
@@ -111,7 +112,13 @@ const TodoCard = ({ task, handleDelete }) => {
   const handleEdit = (e, id) => {
     e.preventDefault();
     dispatch(
-      editTask(id, token, state.task_date, state.task_time, state.task_msg)
+      editTask(
+        id,
+        token,
+        state.task_date,
+        newTime(state.task_time),
+        state.task_msg
+      )
     );
     setTimeout(() => {
       handleClose();
@@ -196,11 +203,10 @@ const TodoCard = ({ task, handleDelete }) => {
                     inputProps={{
                       step: 300, // 5 min
                     }}
-                    value={secondsToHours(task.task_time)}
+                    value={state.task_time}
                     style={{ marginLeft: "30px", marginTop: "30px" }}
                     onChange={handleChange}
                   />
-
                   <Button
                     label="add"
                     type="submit"

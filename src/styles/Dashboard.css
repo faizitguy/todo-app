@@ -1,4 +1,52 @@
-.dashboard__todo {
-  width: 30%;
+.task {
+  width: 360px;
+  height: 350px;
   margin: auto;
+  background: rgb(248, 249, 250);
+}
+
+.taskbar {
+  border: 1px solid rgb(222, 220, 220);
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.taskbar > span {
+  margin: 10px;
+  font-size: 20px;
+}
+.add_icon {
+  border: 1px solid rgb(222, 220, 220);
+  margin-left: 10px;
+  height: 50px !important;
+  width: 40px !important;
+}
+
+.todo_card {
+  border: 1px solid rgb(222, 220, 220);
+  width: 360px;
+  height: 80px;
+  display: flex;
+
+  margin: auto;
+  align-items: center;
+}
+
+.todo_image {
+  width: 100px;
+}
+.todo_image img {
+  width: 50px;
+}
+
+.todo_content {
+  border: 1px solid black;
+  width: 130px;
+  margin-left: -10px;
+}
+.todo_content div {
+  margin: 2px;
+  text-align: left;
+  font-size: 16px;
 }
