@@ -3,6 +3,7 @@
   height: 350px;
   margin: auto;
   background: rgb(248, 249, 250);
+  padding: 20px;
 }
 
 .taskbar {
@@ -41,12 +42,16 @@
 }
 
 .todo_content {
-  border: 1px solid black;
-  width: 130px;
+  width: 160px;
   margin-left: -10px;
 }
 .todo_content div {
   margin: 2px;
   text-align: left;
   font-size: 16px;
+}
+
+.todo_buttons {
+  margin-left: 60px;
+  display: flex;
 }

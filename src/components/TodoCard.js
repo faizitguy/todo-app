@@ -12,6 +12,9 @@ import { responsiveFontSizes, TextField } from "@material-ui/core";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
+import EditIcon from "@material-ui/icons/Edit";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -127,7 +130,35 @@ const TodoCard = ({ task, handleDelete }) => {
 
   return (
     <div style={{ margin: "15px" }}>
-      <Card className={classes.root}>
+      {/* new todo card */}
+
+      <div style={{ marginTop: "10px" }}>
+        <div className="todo_card">
+          <div className="todo_image">
+            <img src={task.user_icon} />
+          </div>
+          <div className="todo_content">
+            <div style={{ fontWeight: "700" }}>{task.task_msg}</div>
+            <div>{task.task_date}</div>
+            <div>{secondsToHours(task.task_time)}</div>
+          </div>
+          <div className="todo_buttons">
+            <div className="edit_icon">
+              <IconButton>
+                <EditIcon onClick={() => handleOpen()} />
+              </IconButton>
+            </div>
+
+            <div className="edit_icon">
+              <IconButton>
+                <DeleteIcon onClick={() => handleDelete(task.id, token)} />
+              </IconButton>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <Card className={classes.root}>
         <CardContent>
           <Typography variant="h5" component="h2">
             {task.task_msg}
@@ -143,7 +174,7 @@ const TodoCard = ({ task, handleDelete }) => {
           <Button onClick={() => handleOpen()}>Edit</Button>
           <Button onClick={() => handleDelete(task.id, token)}>Delete</Button>
         </CardActions>
-      </Card>
+      </Card> */}
 
       <div>
         <div>

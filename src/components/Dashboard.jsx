@@ -16,10 +16,9 @@ import {
 import TodoCard from "./TodoCard";
 import { addTask, getTask, deleteTask } from "../redux/actionCreator";
 import Pagination from "@material-ui/lab/Pagination";
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-
-
+import AddIcon from "@material-ui/icons/Add";
+import EditIcon from "@material-ui/icons/Edit";
+import IconButton from "@material-ui/core/IconButton";
 
 // useStyles for component
 
@@ -54,9 +53,11 @@ const Dashboard = () => {
   const [task, setTask] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("07:30");
+  const [isAdding, setIsAdding] = useState(false);
+
 
   const token = useSelector((state) => state.token);
-  console.log(task, date, time, 'task, date,time')
+  console.log(task, date, time, "task, date,time");
   // onload get tasks
 
   useState(() => {
@@ -71,8 +72,13 @@ const Dashboard = () => {
     e.preventDefault();
     dispatch(addTask(date, newTime(time), task, token))
       .then(() => dispatch(getTask(token)))
-      .then(() => setTask(""));
+      .then(() => setTask(""))
+      .then(() => setIsAdding(false))
   };
+
+  const handleToggle = () => {
+    isAdding? setIsAdding(false): setIsAdding(true)
+  }
 
   // handle delete request
 
@@ -101,95 +107,100 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard__todo">
-      <h4>Add Task </h4>
-
-
-      {/* <form
-        className={classes.form}
-        noValidate
-        style={{ padding: "20px", border: "2px solid grey" }}
-      >
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="email"
-          label="Add Task"
-          name="email"
-          autoFocus
-          onChange={(e) => setTask(e.target.value)}
-          value={task}
-        />
-        <TextField
-          id="date"
-          label="Date"
-          type="date"
-          defaultValue="2021-03-29"
-          className={classes.textField}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
-        <TextField
-          id="time"
-          label="Time"
-          type="time"
-         
-          className={classes.textField}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          inputProps={{
-            step: 300, // 5 min
-          }}
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-          style={{ marginLeft: "20px" }}
-        />
-        <Button
-          label="add"
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          className={classes.submit}
-          onClick={handleTask}
-        >
-          Add Task
-        </Button>
-      </form> */}
-
+      {/* Add task form */}
 
       {/* New UI */}
 
-      <div className = "task">
-        <div className = "taskbar">
-          <span>Tasks 0</span>
-          
-          <AddIcon className = "add_icon" />
-          </div>
+      <div className="task">
+        <div className="taskbar">
+          <span>Tasks {todos.data && todos.data.results.length}</span>
+
+          <IconButton>
+
+          <AddIcon className="add_icon" onClick = {handleToggle}/>
+          </IconButton>
+
+        </div>
+        <div>
+          {isAdding && (
+            <form
+              className={classes.form}
+              noValidate
+              
+            >
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Add Task"
+                name="email"
+                autoFocus
+                onChange={(e) => setTask(e.target.value)}
+                value={task}
+              />
+              <TextField
+                id="date"
+                label="Date"
+                type="date"
+                defaultValue="2021-03-29"
+                className={classes.textField}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+              <TextField
+                id="time"
+                label="Time"
+                type="time"
+                className={classes.textField}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputProps={{
+                  step: 300, // 5 min
+                }}
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                style={{ marginLeft: "20px" }}
+              />
+              <Button
+                label="add"
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                onClick={handleTask}
+              >
+                Add Task
+              </Button>
+            </form>
+          )}
+        </div>
+
+        <div>
+          {todos.data &&
+            todos.data.results.map((task) => {
+              return (
+                <TodoCard
+                  task={task}
+                  key={task.id}
+                  handleDelete={handleDelete}
+                />
+              );
+            })}
+        </div>
       </div>
 
       {/* Todo Card */}
 
-      <div className = "todo_card">
-        <div className = "todo_image">
-          <img src = "https://lh3.googleusercontent.com/ogw/ADGmqu--jmh4ul2anH0ooH-XL3cf5iaSnStTetkuTnliNA=s32-c-mo"/>
-        </div>
-        <div className = "todo_content">
-          <div style = {{fontWeight:"700"}}>task</div>
-          <div>date</div>
-        </div>
-        <div className = "todo_buttons">edit button</div>
-      </div>
+      {/* Pagination */}
 
-
- {/* Pagination */}
-
-      <Pagination
+      {/* <Pagination
         style={{
           display: "flex",
           alignItems: "center",
@@ -200,11 +211,11 @@ const Dashboard = () => {
         count={todos.data && Math.ceil(todos.data.results.length / limit)}
         page={pageNo}
         onChange={(e, i) => setPageNumber(i)}
-      />
+      /> */}
 
-    {/* Todos */}
-    
-      <div>
+      {/* Todos */}
+
+      {/* <div>
         {todos.data &&
           todos.data.results
             .filter((_, index) => index >= offset && index < offset + limit)
@@ -219,7 +230,7 @@ const Dashboard = () => {
                 </div>
               );
             })}
-      </div>
+      </div> */}
     </div>
   );
 };
