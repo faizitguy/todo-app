@@ -129,7 +129,7 @@ const TodoCard = ({ task, handleDelete }) => {
   };
 
   return (
-    <div style={{ margin: "15px" }}>
+    <div>
       {/* new todo card */}
 
       <div style={{ marginTop: "10px" }}>

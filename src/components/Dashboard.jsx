@@ -113,12 +113,13 @@ const Dashboard = () => {
 
       <div className="task">
         <div className="taskbar">
-          <span>Tasks {todos.data && todos.data.results.length}</span>
+          <span >Tasks <span style = {{fontWeight:"700",  borderRadius:"50%", padding:"3px"}}> {todos.data && todos.data.results.length}</span></span>
+        
 
           <IconButton>
-
-          <AddIcon className="add_icon" onClick = {handleToggle}/>
+          <AddIcon className="add_icon" onClick = {handleToggle} />
           </IconButton>
+         
 
         </div>
         <div>
